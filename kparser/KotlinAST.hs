@@ -1,12 +1,4 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-
 module KotlinAST where
-
-data KExpresssion
-  = TBD
-  | KUnknown
-      { _kuRawValue :: String
-      }
 
 data KType
   = KUnit
@@ -15,20 +7,56 @@ data KType
       { _ktypeName :: String,
         _nullable :: Bool
       }
+  deriving (Show, Eq)
 
-data KFunInput
-  = KFunParam
-      { _paramName :: String,
-        _paramType :: KType,
-        _defaultValue :: Maybe KExpresssion
+data KVisibility = KPublic | KPrivate | KInternal | KProtected
+  deriving (Show, Eq)
+
+data KParamDef = KParamDef
+  { _paramDefName :: String,
+    _paramDefType :: KType,
+    _paramDefaultValue :: Maybe KExpresssion
+  }
+  deriving (Show, Eq)
+
+data KParam = KParam
+  { _paramName :: String,
+    _paramValue :: KExpresssion
+  }
+  deriving (Show, Eq)
+
+data KAnnotation = KAnnotation
+  { _annotationName :: String,
+    _annotationParams :: [KParam]
+  }
+  deriving (Show, Eq)
+
+data KLiteral
+  = KString
+      { _kStringValue :: String
       }
-  | KFunReceiver
-      { _receiverType :: KType
+  | KInt
+      { _kIntValue :: Int
       }
+  deriving (Show, Eq)
+
+data KExpresssion
+  = KVarDeclaration
+  | KFunCall
+  | KBranching
+  | KLoop
+  | KUnknown
+      { _unknownRawValue :: String
+      }
+  deriving (Show, Eq)
 
 data KFun = KFun
-  { _funName :: String,
-    _funInput :: [KFunInput],
+  { _funAnnotations :: [KAnnotation],
+    _funVisibility :: KVisibility,
+    _funName :: String,
+    _funReceivers :: [KType],
+    _funParams :: [KParamDef],
     _funOutput :: KType,
-    _body :: [KExpresssion]
+    _funBody :: [KExpresssion]
   }
+  deriving (Show, Eq)

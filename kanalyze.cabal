@@ -24,7 +24,8 @@ extra-source-files:
     README.md
 
 library kparser
-  exposed-modules:     KParser
+  exposed-modules:     KParser,
+                       KotlinAST
   hs-source-dirs:      kparser
   build-depends:       base,
                        parsec

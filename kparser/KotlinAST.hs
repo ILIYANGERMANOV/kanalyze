@@ -1,5 +1,8 @@
 module KotlinAST where
 
+data KVisibility = KPublic | KPrivate | KInternal | KProtected
+  deriving (Show, Eq)
+
 data KType
   = KUnit
   | KNothing
@@ -9,11 +12,9 @@ data KType
       }
   deriving (Show, Eq)
 
-data KVisibility = KPublic | KPrivate | KInternal | KProtected
-  deriving (Show, Eq)
-
 data KParamDef = KParamDef
-  { _paramDefName :: String,
+  { _paramDefAnnotations :: [KAnnotation],
+    _paramDefName :: String,
     _paramDefType :: KType,
     _paramDefaultValue :: Maybe KExpresssion
   }
@@ -28,6 +29,12 @@ data KParam = KParam
 data KAnnotation = KAnnotation
   { _annotationName :: String,
     _annotationParams :: [KParam]
+  }
+  deriving (Show, Eq)
+
+data KClass = KDataClass
+  { _dataClassAnnotations :: [KAnnotation],
+    _dataClassName :: String
   }
   deriving (Show, Eq)
 
@@ -50,13 +57,18 @@ data KExpresssion
       }
   deriving (Show, Eq)
 
+data KSignature = KSignature
+  { _sigReceivers :: [KType],
+    _sigParams :: [KParamDef],
+    _sigOutput :: KType
+  }
+  deriving (Show, Eq)
+
 data KFun = KFun
   { _funAnnotations :: [KAnnotation],
     _funVisibility :: KVisibility,
     _funName :: String,
-    _funReceivers :: [KType],
-    _funParams :: [KParamDef],
-    _funOutput :: KType,
+    _funSignature :: KSignature,
     _funBody :: [KExpresssion]
   }
   deriving (Show, Eq)

@@ -8,14 +8,19 @@ type ClassRef = String
 data KType
   = KUnit
   | KNothing
-  | KInt Int
-  | KLong Int
-  | KDouble Double
-  | KFloat Float
-  | KString String
-  | KBoolean Bool
+  | KInt
+  | KLong
+  | KDouble
+  | KFloat
+  | KChar
+  | KString
+  | KBoolean
   | KClassRef ClassRef
   | KLambda KSignature
+  | KGeneric
+      { genericName :: String,
+        genericInherits :: ClassRef
+      }
   | KNullable KType
   deriving (Show, Eq)
 
@@ -48,14 +53,22 @@ data KAnnotationValue = KAnnotationValue
   }
   deriving (Show, Eq)
 
+data KLiteral
+  = KLiteralInt Int
+  | KLiteralDouble Double
+  | KLiteralFloat Float
+  | KLiteralChar Char
+  | KLiteralString String
+  | KLiteralBoolean Bool
+  | KLiteralUnit
+  deriving (Show, Eq)
+
 data KExpresssion
-  = KVarDeclaration
-  | KFunCall
-  | KBranching
-  | KLoop
-  | KUnknown
-      { _unknownRawValue :: String
-      }
+  = KLiteralExpression KLiteral
+  | KPostFixIncrement KExpresssion
+  | KPostFixDecrement KExpresssion
+  | KAccessor
+  | KUnknown String
   deriving (Show, Eq)
 
 data KFunDef = KFunDef
